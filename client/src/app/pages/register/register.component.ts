@@ -34,16 +34,28 @@ export class RegisterComponent {
       return;
     }
 
-    this.isLoading = true;
     this.errorMessage = '';
+    this.isLoading = true;
 
     const { name, email, password, role } = this.registerForm.value;
 
+    console.log('=== REGISTER REQUEST ===');
+    console.log('Name:', name);
+    console.log('Email:', email);
+    console.log('Role:', role);
+    console.log('========================');
+
     this.authService.register(name, email, password, role).subscribe({
-      next: () => {
-        this.router.navigate(['/login']);
+      next: (response) => {
+        console.log('=== REGISTER SUCCESS ===');
+        console.log('Response:', response);
+        console.log('========================');
+
+        this.isLoading = false;
+        this.router.navigate(['/login'], { queryParams: { registered: 'true' } });
       },
       error: (error) => {
+        console.error('Registration failed:', error);
         this.isLoading = false;
         this.errorMessage = error.error?.message || 'Registration failed. Please try again.';
       }

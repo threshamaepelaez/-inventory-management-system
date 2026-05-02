@@ -1,25 +1,220 @@
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 p-6">
-  <!-- Total Products -->
-  <div class="bg-white shadow rounded-lg p-4 text-center">
-    <h2 class="text-lg font-semibold">Total Products</h2>
-    <p class="text-2xl font-bold text-blue-600">{{ totalProducts }}</p>
-  </div>
+<div class="p-6 sm:p-10">
+  <div class="flex flex-col gap-6">
+    <!-- Top Header Bar -->
+    <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+      <div>
+        <p class="text-sm text-gray-500">Welcome back, {{ currentUserName }}!</p>
+        <h1 class="text-3xl font-bold text-slate-900">Dashboard</h1>
+        <p class="mt-1 text-sm text-gray-500">{{ currentDate }}</p>
+      </div>
+      <div class="flex items-center gap-3">
+        <button
+          class="inline-flex items-center justify-center rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:border-slate-400 hover:text-slate-900"
+          (click)="loadDashboardData()"
+        >
+          Refresh
+        </button>
+        <button
+          class="inline-flex items-center justify-center rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-indigo-700"
+          [routerLink]="['/products']"
+        >
+          Manage Products
+        </button>
+      </div>
+    </div>
 
-  <!-- Low Stock Items -->
-  <div class="bg-white shadow rounded-lg p-4 text-center">
-    <h2 class="text-lg font-semibold">Low Stock Items</h2>
-    <p class="text-2xl font-bold text-red-600">{{ lowStockItems }}</p>
-  </div>
+    <!-- Welcome Banner -->
+    <div class="w-full rounded-2xl bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-700 p-8 text-white shadow-lg">
+      <div class="flex items-center justify-between">
+        <div>
+          <h2 class="text-2xl font-bold">Welcome back, {{ currentUserName }}!</h2>
+          <p class="mt-2 text-indigo-100">Here's what's happening with your inventory today.</p>
+        </div>
+        <div class="text-4xl">✨</div>
+      </div>
+    </div>
 
-  <!-- Categories Count -->
-  <div class="bg-white shadow rounded-lg p-4 text-center">
-    <h2 class="text-lg font-semibold">Categories</h2>
-    <p class="text-2xl font-bold text-green-600">{{ categoriesCount }}</p>
-  </div>
+    <!-- Stat Cards -->
+    <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <article class="rounded-2xl bg-gradient-to-br from-blue-500 to-blue-600 p-6 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm font-medium text-blue-100">Total Products</p>
+            <p class="mt-2 text-3xl font-bold">{{ totalProducts }}</p>
+            <p class="text-xs text-blue-200">In inventory</p>
+          </div>
+          <div class="rounded-full bg-white/20 p-3">
+            <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+            </svg>
+          </div>
+        </div>
+      </article>
+      <article class="rounded-2xl bg-gradient-to-br from-red-500 to-red-600 p-6 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm font-medium text-red-100">Low Stock Items</p>
+            <p class="mt-2 text-3xl font-bold">{{ lowStockItems }}</p>
+            <p class="text-xs text-red-200">Need attention</p>
+          </div>
+          <div class="rounded-full bg-white/20 p-3">
+            <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+            </svg>
+          </div>
+        </div>
+      </article>
+      <article class="rounded-2xl bg-gradient-to-br from-green-500 to-green-600 p-6 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm font-medium text-green-100">Categories</p>
+            <p class="mt-2 text-3xl font-bold">{{ categoriesCount }}</p>
+            <p class="text-xs text-green-200">Active categories</p>
+          </div>
+          <div class="rounded-full bg-white/20 p-3">
+            <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+            </svg>
+          </div>
+        </div>
+      </article>
+      <article class="rounded-2xl bg-gradient-to-br from-purple-500 to-purple-600 p-6 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm font-medium text-purple-100">Total Value</p>
+            <p class="mt-2 text-3xl font-bold">₱{{ totalStockValue | number:'1.2-2' }}</p>
+            <p class="text-xs text-purple-200">Total value</p>
+          </div>
+          <div class="rounded-full bg-white/20 p-3">
+            <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+            </svg>
+          </div>
+        </div>
+      </article>
+    </div>
 
-  <!-- Welcome Message -->
-  <div class="bg-white shadow rounded-lg p-4 text-center">
-    <h2 class="text-lg font-semibold">Welcome</h2>
-    <p class="text-xl font-bold text-purple-600">{{ currentUserName }}</p>
+    <!-- Quick Actions -->
+    <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div class="cursor-pointer rounded-2xl bg-blue-50 p-6 transition-all duration-300 hover:shadow-lg hover:bg-blue-100 transform hover:-translate-y-1" [routerLink]="['/products']">
+        <div class="flex items-center gap-4">
+          <div class="rounded-full bg-blue-100 p-3">
+            <svg class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+            </svg>
+          </div>
+          <div>
+            <h3 class="font-semibold text-slate-900">View Products</h3>
+            <p class="text-sm text-slate-500">Browse inventory</p>
+          </div>
+        </div>
+      </div>
+      <div class="cursor-pointer rounded-2xl bg-green-50 p-6 transition-all duration-300 hover:shadow-lg hover:bg-green-100 transform hover:-translate-y-1" [routerLink]="['/products/add']">
+        <div class="flex items-center gap-4">
+          <div class="rounded-full bg-green-100 p-3">
+            <svg class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+            </svg>
+          </div>
+          <div>
+            <h3 class="font-semibold text-slate-900">Add Product</h3>
+            <p class="text-sm text-slate-500">Create new item</p>
+          </div>
+        </div>
+      </div>
+      <div class="cursor-pointer rounded-2xl bg-red-50 p-6 transition-all duration-300 hover:shadow-lg hover:bg-red-100 transform hover:-translate-y-1" [routerLink]="['/products']" [queryParams]="{filter: 'low-stock'}">
+        <div class="flex items-center gap-4">
+          <div class="rounded-full bg-red-100 p-3">
+            <svg class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+            </svg>
+          </div>
+          <div>
+            <h3 class="font-semibold text-slate-900">Low Stock Alert</h3>
+            <p class="text-sm text-slate-500">{{ lowStockItems }} items</p>
+          </div>
+        </div>
+      </div>
+      <div class="cursor-pointer rounded-2xl bg-purple-50 p-6 transition-all duration-300 hover:shadow-lg hover:bg-purple-100 transform hover:-translate-y-1" (click)="loadDashboardData()">
+        <div class="flex items-center gap-4">
+          <div class="rounded-full bg-purple-100 p-3">
+            <svg class="h-6 w-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+            </svg>
+          </div>
+          <div>
+            <h3 class="font-semibold text-slate-900">Refresh</h3>
+            <p class="text-sm text-slate-500">Update data</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Products Section -->
+    <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-lg">
+      <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h2 class="text-xl font-semibold text-slate-900">Recent Products</h2>
+          <p class="text-sm text-slate-500">Latest inventory items</p>
+        </div>
+        <a
+          class="rounded-full border border-slate-200 bg-white px-4 py-2 text-sm text-slate-700 transition hover:border-slate-300"
+          [routerLink]="['/products']"
+        >
+          View All
+        </a>
+      </div>
+
+      <div class="mt-6 overflow-hidden rounded-2xl border border-slate-200">
+        <table class="min-w-full divide-y divide-slate-200 text-left text-sm">
+          <thead class="bg-slate-50">
+            <tr>
+              <th class="px-6 py-4 font-medium text-slate-600">Product</th>
+              <th class="px-6 py-4 font-medium text-slate-600">Category</th>
+              <th class="px-6 py-4 font-medium text-slate-600">Stock Status</th>
+              <th class="px-6 py-4 font-medium text-slate-600">Price</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-200 bg-white">
+            <tr *ngFor="let product of recentProducts" class="hover:bg-slate-50 transition-colors duration-200">
+              <td class="px-6 py-4">
+                <div class="flex items-center gap-3">
+                  <img *ngIf="product.imageUrl" [src]="'http://localhost:5000' + product.imageUrl" alt="{{ product.name }}" class="h-10 w-10 rounded-lg object-cover">
+                  <div *ngIf="!product.imageUrl" class="h-10 w-10 bg-slate-100 rounded-lg flex items-center justify-center">
+                    <svg class="h-5 w-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                    </svg>
+                  </div>
+                  <div>
+                    <p class="font-medium text-slate-900">{{ product.name }}</p>
+                    <p class="text-xs text-slate-500">{{ product.description || 'No description' }}</p>
+                  </div>
+                </div>
+              </td>
+              <td class="px-6 py-4">
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-800">
+                  {{ product.category || 'Uncategorized' }}
+                </span>
+              </td>
+              <td class="px-6 py-4">
+                <span [ngClass]="getQuantityClass(product.quantity)" class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium">
+                  {{ getStockStatusLabel(product.quantity) }}
+                </span>
+              </td>
+              <td class="px-6 py-4">
+                <span class="font-semibold text-emerald-600">₱{{ product.price | number:'1.2-2' }}</span>
+              </td>
+            </tr>
+            <tr *ngIf="recentProducts.length === 0">
+              <td colspan="4" class="px-6 py-12 text-center text-slate-500">No recent products available.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <div *ngIf="errorMessage" class="rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-800">
+      {{ errorMessage }}
+    </div>
   </div>
 </div>

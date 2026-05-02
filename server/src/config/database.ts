@@ -18,7 +18,9 @@ const sequelize = new Sequelize(
 export const connectDB = async (): Promise<void> => {
   try {
     await sequelize.authenticate();
-    await sequelize.sync({ alter: true });
+    // Use alter: false to avoid modifying existing tables
+    // This prevents issues with tables that already have indexes/constraints
+    await sequelize.sync({ alter: false });
     console.log('✅ Database connected and models synchronized successfully.');
   } catch (error) {
     console.error('❌ Database connection failed:', error);

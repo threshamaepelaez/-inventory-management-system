@@ -8,7 +8,9 @@ import {
   updateProduct,
   deleteProduct,
   getLowStockProducts,
+  getInventoryLogs,
 } from '../controllers/productController';
+import { getDashboardStats } from '../controllers/dashboardController';
 import { authenticate, isAdmin } from '../middleware/auth';
 
 const router = Router();
@@ -24,16 +26,20 @@ const storage = multer.diskStorage({
   },
 });
 
-const upload = multer({ storage });
+const upload = multer({ 
+  storage
+});
 
 // Public routes (authenticated)
 router.get('/', authenticate, getAllProducts);
 router.get('/low-stock', authenticate, isAdmin, getLowStockProducts);
+router.get('/stats', authenticate, getDashboardStats);
+router.get('/inventory/logs', authenticate, getInventoryLogs);
 router.get('/:id', authenticate, getProductById);
 
 // Admin only routes
-router.post('/', authenticate, isAdmin, upload.single('image'), createProduct);
-router.put('/:id', authenticate, isAdmin, upload.single('image'), updateProduct);
+router.post('/', authenticate, isAdmin, upload.any(), createProduct);
+router.put('/:id', authenticate, isAdmin, upload.any(), updateProduct);
 router.delete('/:id', authenticate, isAdmin, deleteProduct);
 
 export default router;

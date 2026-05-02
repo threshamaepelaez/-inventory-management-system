@@ -19,6 +19,25 @@ export class ProductFormComponent implements OnInit {
   errorMessage: string = '';
   selectedFile: File | null = null;
   imagePreview: string | null = null;
+  
+  // Fixed categories list
+  categories: string[] = ['Electronics', 'Fashion', 'Home & Living', 'Gadgets', 'Food & Beverage', 'Sports', 'Books', 'Clothing', 'Toys', 'Other'];
+
+
+
+  // Getter to check if category is selected
+  get isCategorySelected(): boolean {
+    const category = this.productForm.get('category')?.value;
+    return category !== null && category !== '';
+  }
+
+  // Getter to check if form has required fields filled (name, quantity, price)
+  get canSubmit(): boolean {
+    const name = this.productForm.get('name')?.value;
+    const quantity = this.productForm.get('quantity')?.value;
+    const price = this.productForm.get('price')?.value;
+    return !!(name && quantity !== null && quantity !== '' && price !== null && price !== '');
+  }
 
   constructor(
     private fb: FormBuilder,
@@ -30,8 +49,8 @@ export class ProductFormComponent implements OnInit {
       name: ['', [Validators.required, Validators.minLength(2)]],
       description: [''],
       category: [''],
-      quantity: [0, [Validators.required, Validators.min(0)]],
-      price: ['', [Validators.required, Validators.min(0)]]
+      quantity: [null, [Validators.required, Validators.min(0)]],
+      price: [null, [Validators.required, Validators.min(0)]]
     });
   }
 
@@ -81,8 +100,20 @@ export class ProductFormComponent implements OnInit {
     }
   }
 
+  removeImage(event: Event): void {
+    event.stopPropagation();
+    this.selectedFile = null;
+    this.imagePreview = null;
+  }
+
   onSubmit(): void {
-    if (this.productForm.invalid) {
+    // Check required fields: name, quantity, price
+    const name = this.productForm.get('name')?.value;
+    const quantity = this.productForm.get('quantity')?.value;
+    const price = this.productForm.get('price')?.value;
+
+    if (!name || !quantity || !price) {
+      this.productForm.markAllAsTouched();
       return;
     }
 
@@ -90,27 +121,40 @@ export class ProductFormComponent implements OnInit {
     this.errorMessage = '';
 
     const formData = new FormData();
-    formData.append('name', this.productForm.get('name')?.value);
+    formData.append('name', name);
     formData.append('description', this.productForm.get('description')?.value || '');
     formData.append('category', this.productForm.get('category')?.value || '');
-    formData.append('quantity', this.productForm.get('quantity')?.value);
-    formData.append('price', this.productForm.get('price')?.value);
+    formData.append('quantity', String(quantity));
+    formData.append('price', String(price));
 
     if (this.selectedFile) {
       formData.append('image', this.selectedFile);
     }
+
+    // Log FormData contents for debugging
+    console.log('=== PRODUCT FORM DATA ===');
+    console.log('name:', name);
+    console.log('description:', this.productForm.get('description')?.value);
+    console.log('category:', this.productForm.get('category')?.value);
+    console.log('quantity:', quantity);
+    console.log('price:', price);
+    console.log('image:', this.selectedFile?.name || 'no file');
+    console.log('=========================');
 
     const request = this.isEditMode && this.productId
       ? this.productService.updateProduct(this.productId, formData)
       : this.productService.createProduct(formData);
 
     request.subscribe({
-      next: () => {
+      next: (response) => {
+        console.log('Product saved successfully:', response);
+        this.isLoading = false;
         this.router.navigate(['/products']);
       },
       error: (error) => {
         this.isLoading = false;
-        this.errorMessage = error.error?.message || 'Error saving product';
+        console.error('Error saving product:', error);
+        alert(error.error?.message || 'Error saving product: ' + (error.message || 'Unknown error'));
       }
     });
   }

@@ -11,12 +11,25 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   register(name: string, email: string, password: string, role?: string): Observable<any> {
+    console.log('=== AUTH SERVICE REGISTER ===');
+    console.log('URL:', `${this.apiUrl}/register`);
+    console.log('Payload:', { name, email, role });
+    console.log('=============================');
+
     return this.http.post(`${this.apiUrl}/register`, { name, email, password, role });
   }
 
   login(email: string, password: string): Observable<any> {
+    console.log('=== AUTH SERVICE LOGIN ===');
+    console.log('URL:', `${this.apiUrl}/login`);
+    console.log('Email:', email);
+    console.log('===========================');
+    
     return this.http.post(`${this.apiUrl}/login`, { email, password }).pipe(
       tap((response: any) => {
+        console.log('=== AUTH SERVICE RESPONSE ===');
+        console.log('Response:', response);
+        console.log('==============================');
         if (response.token) {
           this.setToken(response.token);
           this.setUser(response.user);
